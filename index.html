@@ -1,89 +1,799 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            width: 800px;
-            height: 800px;
-            background-color: #000;
-            color: #fff;
-            font-family: 'Pretendard', sans-serif;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            overflow: hidden;
-        }
-        .background {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
-            opacity: 0.8;
-            z-index: -1;
-        }
-        .accent-bar {
-            position: absolute;
-            top: 50px;
-            left: 50px;
-            width: 100px;
-            height: 10px;
-            background-color: #ff4d4d;
-        }
-        .container {
-            width: 80%;
-            text-align: left;
-        }
-        .category {
-            font-size: 24px;
-            color: #ff4d4d;
-            font-weight: 800;
-            margin-bottom: 10px;
-        }
-        .title {
-            font-size: 54px;
-            font-weight: 900;
-            line-height: 1.2;
-            margin-bottom: 40px;
-            word-break: keep-all;
-        }
-        .content {
-            font-size: 28px;
-            line-height: 1.6;
-            color: #ccc;
-        }
-        .highlight {
-            color: #fff;
-            font-weight: 700;
-            background: linear-gradient(transparent 60%, #ff4d4d 60%);
-        }
-        .footer {
-            margin-top: 60px;
-            font-size: 18px;
-            color: #666;
-            letter-spacing: 2px;
-        }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>저능아 테스트</title>
+  <style>
+    :root {
+      --bg: #09090b;
+      --panel: #18181b;
+      --panel2: #111113;
+      --line: #27272a;
+      --text: #f4f4f5;
+      --muted: #a1a1aa;
+      --dim: #71717a;
+      --white: #ffffff;
+      --black: #09090b;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.08), transparent 26rem),
+        radial-gradient(circle at bottom right, rgba(255,255,255,0.06), transparent 24rem),
+        var(--bg);
+      color: var(--text);
+      font-family: Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", Arial, sans-serif;
+      letter-spacing: -0.025em;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .wrap {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--dim);
+      font-size: 13px;
+      letter-spacing: 0.32em;
+      font-weight: 800;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(38px, 7vw, 72px);
+      line-height: 0.95;
+      font-weight: 950;
+    }
+
+    .reset-top {
+      border: 1px solid var(--line);
+      background: rgba(24,24,27,0.9);
+      color: var(--text);
+      border-radius: 14px;
+      padding: 12px 16px;
+      cursor: pointer;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .reset-top:hover {
+      background: #27272a;
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.75fr);
+      gap: 20px;
+      align-items: start;
+    }
+
+    .card {
+      background: rgba(24,24,27,0.88);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 28px 70px rgba(0,0,0,0.35);
+      backdrop-filter: blur(8px);
+    }
+
+    .progress-shell {
+      height: 7px;
+      background: #27272a;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0;
+      background: var(--white);
+      transition: width 260ms ease;
+    }
+
+    .content {
+      padding: clamp(20px, 4vw, 36px);
+    }
+
+    .topline {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 26px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      background: #27272a;
+      color: #d4d4d8;
+      padding: 7px 12px;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .score-small {
+      color: var(--dim);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    h2 {
+      margin: 0 0 28px;
+      font-size: clamp(25px, 4.2vw, 40px);
+      line-height: 1.22;
+      font-weight: 930;
+    }
+
+    .options {
+      display: grid;
+      gap: 12px;
+    }
+
+    .option {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: rgba(9,9,11,0.72);
+      color: var(--text);
+      border-radius: 22px;
+      padding: 18px;
+      cursor: pointer;
+      text-align: left;
+      transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+    }
+
+    .option:hover {
+      transform: translateY(-1px);
+      border-color: #71717a;
+      background: rgba(39,39,42,0.72);
+    }
+
+    .option.selected {
+      background: var(--white);
+      color: var(--black);
+      border-color: var(--white);
+    }
+
+    .option-inner {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .letter {
+      width: 38px;
+      height: 38px;
+      flex: 0 0 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 13px;
+      background: #27272a;
+      color: #d4d4d8;
+      font-weight: 950;
+    }
+
+    .selected .letter {
+      background: var(--black);
+      color: var(--white);
+    }
+
+    .option-text {
+      margin: 0;
+      font-size: clamp(16px, 2.4vw, 19px);
+      line-height: 1.55;
+      font-weight: 780;
+    }
+
+    .option-score {
+      margin: 4px 0 0;
+      color: var(--dim);
+      font-size: 14px;
+      font-weight: 750;
+    }
+
+    .selected .option-score {
+      color: #52525b;
+    }
+
+    aside {
+      display: grid;
+      gap: 16px;
+    }
+
+    .side-card {
+      background: rgba(24,24,27,0.88);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 20px;
+      box-shadow: 0 18px 44px rgba(0,0,0,0.25);
+    }
+
+    .side-title {
+      margin: 0;
+      font-size: 19px;
+      font-weight: 940;
+    }
+
+    .side-text {
+      margin: 12px 0 0;
+      color: var(--muted);
+      line-height: 1.75;
+      font-size: 14px;
+    }
+
+    .score-grid {
+      margin-top: 16px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .score-box {
+      background: var(--panel2);
+      border-radius: 16px;
+      padding: 13px;
+      border: 1px solid transparent;
+    }
+
+    .score-box.hot {
+      border-color: #71717a;
+    }
+
+    .score-box small {
+      color: var(--dim);
+      display: block;
+      margin-bottom: 4px;
+      font-weight: 800;
+    }
+
+    .score-box strong {
+      font-size: 20px;
+      font-weight: 950;
+    }
+
+    .nav-grid {
+      margin-top: 16px;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+    }
+
+    .nav-btn {
+      height: 42px;
+      border: 0;
+      border-radius: 14px;
+      cursor: pointer;
+      background: var(--panel2);
+      color: var(--dim);
+      font-weight: 950;
+    }
+
+    .nav-btn.answered {
+      background: #3f3f46;
+      color: var(--text);
+    }
+
+    .nav-btn.current {
+      background: var(--white);
+      color: var(--black);
+    }
+
+    .grade-list {
+      margin-top: 16px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .grade-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      background: var(--panel2);
+      border-radius: 14px;
+      padding: 11px 12px;
+      font-size: 14px;
+    }
+
+    .grade-row span:first-child {
+      color: var(--dim);
+      font-weight: 850;
+    }
+
+    .grade-row span:last-child {
+      color: var(--text);
+      font-weight: 900;
+      text-align: right;
+    }
+
+    .result {
+      padding: clamp(20px, 4vw, 40px);
+    }
+
+    .result-badge {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      background: var(--white);
+      color: var(--black);
+      padding: 9px 14px;
+      font-size: 14px;
+      font-weight: 950;
+      margin-bottom: 24px;
+    }
+
+    .result-label {
+      color: var(--muted);
+      margin: 0;
+      font-size: 18px;
+      font-weight: 850;
+    }
+
+    .big-score {
+      display: flex;
+      align-items: end;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .big-score strong {
+      font-size: clamp(72px, 14vw, 120px);
+      line-height: 0.9;
+      font-weight: 950;
+    }
+
+    .big-score span {
+      color: var(--dim);
+      font-size: 30px;
+      font-weight: 900;
+      padding-bottom: 12px;
+    }
+
+    .result-title {
+      margin: 30px 0 0;
+      font-size: clamp(36px, 7vw, 64px);
+      line-height: 1;
+      font-weight: 950;
+    }
+
+    .result-subtitle {
+      margin: 12px 0 0;
+      color: #d4d4d8;
+      font-size: clamp(20px, 3vw, 26px);
+      font-weight: 900;
+      line-height: 1.35;
+    }
+
+    .result-desc {
+      max-width: 720px;
+      margin: 20px 0 0;
+      color: var(--muted);
+      line-height: 1.85;
+      font-size: 17px;
+      word-break: keep-all;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 28px;
+    }
+
+    .primary, .secondary {
+      border-radius: 15px;
+      padding: 13px 17px;
+      cursor: pointer;
+      font-weight: 900;
+      border: 1px solid transparent;
+    }
+
+    .primary {
+      background: var(--white);
+      color: var(--black);
+    }
+
+    .secondary {
+      background: var(--panel2);
+      color: var(--text);
+      border-color: var(--line);
+    }
+
+    .secondary:hover, .primary:hover {
+      filter: brightness(1.08);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    footer {
+      margin-top: 22px;
+      color: #52525b;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 840px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+
+      header {
+        flex-direction: column;
+      }
+
+      .reset-top {
+        width: 100%;
+      }
+
+      .wrap {
+        width: min(100% - 24px, 1120px);
+        padding: 18px 0;
+      }
+
+      .content {
+        padding: 20px;
+      }
+
+      .option {
+        border-radius: 18px;
+        padding: 15px;
+      }
+
+      .letter {
+        width: 34px;
+        height: 34px;
+        flex-basis: 34px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="background"></div>
-    <div class="accent-bar"></div>
-    <div class="container">
-        <div class="category">ECONOMY BREAKING NEWS</div>
-        <div class="title">소상공인 <span class="highlight">230만 명</span><br>이자 환급 <span class="highlight">최대 200만 원</span> 확정</div>
-        <div class="content">
-            - 대상: 제2금융권 대출 이용 소상공인<br>
-            - 금액: 1인당 평균 75만 원 (최대 200만 원)<br>
-            - 시기: 5월 24일부터 신청 및 환급 시작
+  <div class="wrap">
+    <header>
+      <div>
+        <p class="eyebrow">BASIC COGNITION CHECK</p>
+        <h1>저능아 테스트</h1>
+      </div>
+      <button class="reset-top" id="resetTop">초기화</button>
+    </header>
+
+    <main>
+      <section class="card">
+        <div class="progress-shell">
+          <div class="progress-bar" id="progressBar"></div>
         </div>
-        <div class="footer">SMART ECONOMY REPORT</div>
-    </div>
+        <div id="quizView" class="content"></div>
+        <div id="resultView" class="result hidden"></div>
+      </section>
+
+      <aside>
+        <section class="side-card">
+          <h3 class="side-title">안내</h3>
+          <p class="side-text">
+            총 10개의 짧은 문항에 답하면 결과가 계산됩니다.
+            너무 오래 고민하지 말고 가장 먼저 떠오르는 답을 고르십시오.
+          </p>
+        </section>
+
+        <section class="side-card">
+          <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;">
+            <h3 class="side-title">진행도</h3>
+            <span id="progressText" style="color:#71717a;font-size:14px;font-weight:850;">0%</span>
+          </div>
+          <div class="nav-grid" id="navGrid"></div>
+        </section>
+
+        <section class="side-card">
+          <h3 class="side-title">진행 방식</h3>
+          <p class="side-text">
+            문항을 모두 완료하면 결과가 표시됩니다.
+            중간에 이전 문항으로 돌아가 답을 바꿀 수 있습니다.
+          </p>
+        </section>
+      </aside>
+    </main>
+
+    <footer>
+      가벼운 온라인 테스트입니다. 결과는 오락용으로만 확인하십시오.
+    </footer>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        text: "문에 ‘당기시오’라고 적혀 있습니다. 당신은 어떻게 합니까?",
+        options: [
+          { label: "A", text: "당긴다", score: 0 },
+          { label: "B", text: "일단 밀어보고 안 되면 당긴다", score: 1 },
+          { label: "C", text: "문이 나를 상대로 심리전을 걸고 있다고 판단한다", score: 3 },
+          { label: "D", text: "문 앞에서 손잡이의 존재 의미를 의심한다", score: 2 }
+        ]
+      },
+      {
+        text: "전자레인지에 금속 용기를 넣지 말라고 적혀 있습니다. 당신의 판단은?",
+        options: [
+          { label: "A", text: "금속 용기는 빼고 데운다", score: 0 },
+          { label: "B", text: "조금만 돌리면 괜찮을지 고민한다", score: 1 },
+          { label: "C", text: "제조사가 금속의 가능성을 두려워한다고 본다", score: 3 },
+          { label: "D", text: "전자레인지도 결국 금속인데 왜 용기만 차별하냐고 생각한다", score: 2 }
+        ]
+      },
+      {
+        text: "친구가 내일 오전 10시까지 오라고 했습니다. 당신의 해석은?",
+        options: [
+          { label: "A", text: "내일 오전 10시 전까지 간다", score: 0 },
+          { label: "B", text: "10시쯤 맞춰 간다", score: 1 },
+          { label: "C", text: "10시 59분도 10시대라서 이론상 가능하다고 본다", score: 3 },
+          { label: "D", text: "오전이라는 개념이 인간을 너무 옥죈다고 본다", score: 2 }
+        ]
+      },
+      {
+        text: "비밀번호가 8자 이상이어야 한다고 나옵니다. abc를 입력했더니 안 됩니다. 이유는?",
+        options: [
+          { label: "A", text: "3자라서", score: 0 },
+          { label: "B", text: "조건을 충족하지 못해서", score: 1 },
+          { label: "C", text: "사이트가 내 짧고 강한 비밀번호 철학을 이해하지 못해서", score: 3 },
+          { label: "D", text: "abc 안에 이미 모든 문자의 가능성이 압축돼 있어서", score: 2 }
+        ]
+      },
+      {
+        text: "뜨거운 냄비를 맨손으로 만지면 어떻게 됩니까?",
+        options: [
+          { label: "A", text: "화상을 입을 수 있다", score: 0 },
+          { label: "B", text: "빨리 놓으면 괜찮을 수도 있다", score: 1 },
+          { label: "C", text: "빨리 만지면 열이 따라오지 못한다", score: 3 },
+          { label: "D", text: "손과 냄비가 서로를 이해하는 시간이 생긴다", score: 2 }
+        ]
+      },
+      {
+        text: "엘리베이터 정원이 8명이고 이미 8명이 탔습니다. 당신의 판단은?",
+        options: [
+          { label: "A", text: "다음 엘리베이터를 탄다", score: 0 },
+          { label: "B", text: "공간이 있으면 조심히 타본다", score: 1 },
+          { label: "C", text: "숨을 참으면 인원수에서 빠진다고 본다", score: 3 },
+          { label: "D", text: "존재감을 낮추면 반 명으로 계산될 수 있다고 본다", score: 2 }
+        ]
+      },
+      {
+        text: "길 안내 앱이 300m 앞에서 우회전하라고 합니다. 당신은 어떻게 합니까?",
+        options: [
+          { label: "A", text: "300m쯤 가서 우회전한다", score: 0 },
+          { label: "B", text: "지도 화면을 보면서 준비한다", score: 1 },
+          { label: "C", text: "지금 바로 우회전해서 앱의 예측을 뛰어넘는다", score: 3 },
+          { label: "D", text: "앱이 나를 어디론가 유도하고 있다고 의심한다", score: 2 }
+        ]
+      },
+      {
+        text: "물건 가격이 9,900원입니다. 만 원을 냈습니다. 거스름돈은 얼마입니까?",
+        options: [
+          { label: "A", text: "100원", score: 0 },
+          { label: "B", text: "100원인데 안 받을 수도 있다", score: 1 },
+          { label: "C", text: "100원을 받으면 지는 느낌이라 안 받는다", score: 3 },
+          { label: "D", text: "거스름돈이라는 제도가 인간을 작게 만든다고 본다", score: 2 }
+        ]
+      },
+      {
+        text: "냉장 보관이라고 적힌 음식을 한여름 차 안에 하루 동안 놔뒀습니다. 당신의 판단은?",
+        options: [
+          { label: "A", text: "상했을 수 있으니 먹지 않는다", score: 0 },
+          { label: "B", text: "냄새를 확인해본다", score: 1 },
+          { label: "C", text: "차도 문이 닫혀 있으니 큰 냉장고라고 본다", score: 3 },
+          { label: "D", text: "음식이 시련을 견뎠는지 확인할 기회라고 본다", score: 2 }
+        ]
+      },
+      {
+        text: "컴퓨터가 인터넷 연결 없음이라고 표시합니다. 가장 먼저 떠오르는 생각은?",
+        options: [
+          { label: "A", text: "와이파이나 랜선을 확인한다", score: 0 },
+          { label: "B", text: "공유기를 껐다 켜본다", score: 1 },
+          { label: "C", text: "컴퓨터가 사회와 단절되고 싶어 한다고 판단한다", score: 3 },
+          { label: "D", text: "인터넷도 결국 인간이 만든 허상이라고 본다", score: 2 }
+        ]
+      }
+    ];
+
+    let current = 0;
+    let answers = Array(questions.length).fill(null);
+    let finished = false;
+
+    const quizView = document.getElementById("quizView");
+    const resultView = document.getElementById("resultView");
+    const progressBar = document.getElementById("progressBar");
+    const progressText = document.getElementById("progressText");
+    const navGrid = document.getElementById("navGrid");
+    const resetTop = document.getElementById("resetTop");
+
+    function getScore() {
+      return answers.reduce((sum, answerIndex, questionIndex) => {
+        if (answerIndex === null) return sum;
+        return sum + questions[questionIndex].options[answerIndex].score;
+      }, 0);
+    }
+
+    function getResult(score) {
+      if (score <= 12) {
+        return {
+          title: "저능아 확정권",
+          badge: "0-12점",
+          subtitle: "문제를 너무 정직하게 풀었습니다.",
+          desc: "표면적인 상식 문항에 그대로 걸렸습니다. 선택지의 이상한 결을 읽지 못하고, 실제 시험지처럼 처리한 흔적이 강합니다."
+        };
+      }
+      if (score <= 19) {
+        return {
+          title: "저능아 의심권",
+          badge: "13-19점",
+          subtitle: "감은 있지만 자꾸 상식으로 도망갑니다.",
+          desc: "몇몇 문항에서는 흐름을 탔지만, 결정적인 순간마다 가장 안전한 해석으로 돌아갔습니다. 응답 패턴이 아직 너무 얌전합니다."
+        };
+      }
+      if (score <= 24) {
+        return {
+          title: "경계선",
+          badge: "20-24점",
+          subtitle: "정상권 직전에서 자주 미끄러집니다.",
+          desc: "문항의 숨은 구조를 어느 정도 읽었지만, 충분히 밀고 나가지는 못했습니다. 조금만 더 상식적으로 고르면 바로 저능아 쪽으로 떨어지는 구간입니다."
+        };
+      }
+      if (score <= 28) {
+        return {
+          title: "정상권",
+          badge: "25-28점",
+          subtitle: "간신히 통과했습니다.",
+          desc: "전체 구조는 읽었습니다. 다만 완전히 압도적인 수준은 아닙니다. 몇 문항에서 망설임이 보이고, 한두 번만 더 상식적으로 골랐으면 판정이 내려갔습니다."
+        };
+      }
+      return {
+        title: "완전 정상",
+        badge: "29-30점",
+        subtitle: "거의 완벽하게 읽었습니다.",
+        desc: "문항의 겉모양에 속지 않고 선택지의 숨은 질서를 거의 끝까지 유지했습니다. 이 테스트에서는 이 정도가 되어야 확실한 정상권입니다."
+      };
+    }
+
+    function updateProgress() {
+      const answered = answers.filter(v => v !== null).length;
+      const progress = Math.round((answered / questions.length) * 100);
+      progressBar.style.width = progress + "%";
+      progressText.textContent = progress + "%";
+    }
+
+    function renderNav() {
+      navGrid.innerHTML = "";
+      questions.forEach((_, index) => {
+        const btn = document.createElement("button");
+        btn.className = "nav-btn";
+        if (answers[index] !== null) btn.classList.add("answered");
+        if (!finished && index === current) btn.classList.add("current");
+        btn.textContent = index + 1;
+        btn.onclick = () => {
+          current = index;
+          finished = false;
+          render();
+        };
+        navGrid.appendChild(btn);
+      });
+    }
+
+    function renderQuestion() {
+      const q = questions[current];
+      const score = getScore();
+
+      quizView.classList.remove("hidden");
+      resultView.classList.add("hidden");
+
+      quizView.innerHTML = `
+        <div class="topline">
+          <span class="pill">${current + 1} / ${questions.length}</span>
+          <span class="score-small">응답 ${answers.filter(v => v !== null).length}개 완료</span>
+        </div>
+        <h2>${q.text}</h2>
+        <div class="options">
+          ${q.options.map((op, index) => `
+            <button class="option ${answers[current] === index ? "selected" : ""}" data-index="${index}">
+              <div class="option-inner">
+                <span class="letter">${op.label}</span>
+                <div>
+                  <p class="option-text">${op.text}</p>
+                </div>
+              </div>
+            </button>
+          `).join("")}
+        </div>
+      `;
+
+      document.querySelectorAll(".option").forEach(btn => {
+        btn.onclick = () => {
+          const index = Number(btn.dataset.index);
+          answers[current] = index;
+          render();
+
+          window.setTimeout(() => {
+            if (current < questions.length - 1) {
+              current += 1;
+              render();
+            } else {
+              finished = true;
+              render();
+            }
+          }, 180);
+        };
+      });
+    }
+
+    function renderResult() {
+      const score = getScore();
+      const result = getResult(score);
+      const shareText = `저능아 테스트 결과: ${result.title}\n${result.subtitle}`;
+
+      quizView.classList.add("hidden");
+      resultView.classList.remove("hidden");
+
+      resultView.innerHTML = `
+        <div class="result-badge">결과</div>
+        <p class="result-label">판정</p>
+        <h2 class="result-title">${result.title}</h2>
+        <p class="result-subtitle">${result.subtitle}</p>
+        <p class="result-desc">${result.desc}</p>
+        <div class="actions">
+          <button class="primary" id="retryBtn">다시 하기</button>
+          <button class="secondary" id="copyBtn">결과 복사</button>
+        </div>
+      `;
+
+      document.getElementById("retryBtn").onclick = reset;
+      document.getElementById("copyBtn").onclick = async () => {
+        try {
+          await navigator.clipboard.writeText(shareText);
+          document.getElementById("copyBtn").textContent = "복사됨";
+          window.setTimeout(() => {
+            const copyBtn = document.getElementById("copyBtn");
+            if (copyBtn) copyBtn.textContent = "결과 복사";
+          }, 1300);
+        } catch (e) {
+          alert(shareText);
+        }
+      };
+    }
+
+    function render() {
+      updateProgress();
+      renderNav();
+      if (finished) renderResult();
+      else renderQuestion();
+    }
+
+    function reset() {
+      current = 0;
+      answers = Array(questions.length).fill(null);
+      finished = false;
+      render();
+    }
+
+    resetTop.onclick = reset;
+    render();
+  </script>
 </body>
 </html>
